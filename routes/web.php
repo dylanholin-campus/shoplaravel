@@ -19,3 +19,6 @@ Route::get('/about', [PageController::class, 'about'])->name('about');
 
 // Le {id} indique à Laravel : "Accepte n'importe quoi ici et passe-le au controller"
 Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
+// Route pour la liste des produits
+// On utilise souvent '/products' pour lister
+Route::get('/products', [ProductController::class, 'index'])->name('products.index');

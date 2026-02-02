@@ -14,14 +14,22 @@ class PageController extends Controller
 // d'un contrôleur Laravel standard
 {
     // Méthode pour la page d'accueil
-public function home()
-{
-    // On génère l'URL pour le produit n°42
-    $url = route('products.show', ['id' => 42]);
+    public function home()
+    {
+        // On prépare les données de la boutique
+        // C'est comme remplir un carton avant de l'envoyer à l'entrepôt (la Vue)
+        $shopData = [
+            'nom_boutique' => 'Joelino Design',
+            'nombre_produits' => 273,
+            'est_ouvert' => true,
+        ];
 
-    // On retourne le message + l'URL générée
-    return "Bienvenue ! Visitez notre produit vedette ici : " . $url;
-}
+        $url = route('products.show', ['id' => 42]);
+
+        // On envoie le tout à la vue 'home'
+        // 'compact' est une fonction magique PHP qui crée le tableau ['shopData' => $shopData, 'url' => $url] automatiquement
+        return view('home', compact('shopData', 'url'));
+    }
 
     // Méthode pour la page À propos
     public function about()
