@@ -1,6 +1,6 @@
 @extends('layouts.app') <!-- On dit : "Utilise le moule app.blade.php" -->
 
-@section('title', 'Accueil - Disney Design') <!-- On change le titre de l'onglet -->
+@section('title', 'Accueil - Disney Design') 
 
 @section('content')
 <h1>Bienvenue chez {{ $shopData['nom_boutique'] }} !</h1>

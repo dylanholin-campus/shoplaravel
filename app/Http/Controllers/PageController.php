@@ -6,18 +6,11 @@ namespace App\Http\Controllers; // Adresse du fichier
 
 use Illuminate\Http\Request; // Importation d'outils
 // On importe des outils de Laravel (ici "Request") dont on pourrait avoir besoin,
-// même si dans cet exemple précis, on ne s'en sert pas encore [web:8].
-
+// même si dans cet exemple précis, on ne s'en sert pas encore
 class PageController extends Controller
-// Définition de la classe : On crée un plan nommé "PageController".
-// "extends Controller" signifie qu'il hérite de tous les pouvoirs de base
-// d'un contrôleur Laravel standard
 {
-    // Méthode pour la page d'accueil
     public function home()
     {
-        // On prépare les données de la boutique
-        // C'est comme remplir un carton avant de l'envoyer à l'entrepôt (la Vue)
         $shopData = [
             'nom_boutique' => 'Disney Design',
             'nombre_produits' => 273,
@@ -26,12 +19,16 @@ class PageController extends Controller
 
         $url = route('products.show', ['id' => 42]);
 
-        // On envoie le tout à la vue 'home'
         // 'compact' est une fonction magique PHP qui crée le tableau ['shopData' => $shopData, 'url' => $url] automatiquement
         return view('home', compact('shopData', 'url'));
+        // compact sert a eviter de faire ça
+
+        //return view('home', [
+        //'shopData' => $shopData,
+        // 'url' => $url
+        //]);
     }
 
-    // Méthode pour la page À propos
     public function about()
     {
         return "Je suis Joel, Designer Industriel basé à Berlin. Ici, on parle chaises et créativité.";
