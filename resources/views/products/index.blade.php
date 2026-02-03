@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Catalogue - Joelino Design</title>
+    <title>Catalogue - Disney Design</title>
 </head>
 <body>
     <h1>Nos Créations Industrielles</h1>
