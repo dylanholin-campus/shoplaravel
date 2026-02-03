@@ -19,7 +19,7 @@ class PageController extends Controller
         // On prépare les données de la boutique
         // C'est comme remplir un carton avant de l'envoyer à l'entrepôt (la Vue)
         $shopData = [
-            'nom_boutique' => 'Joelino Design',
+            'nom_boutique' => 'Disney Design',
             'nombre_produits' => 273,
             'est_ouvert' => true,
         ];
