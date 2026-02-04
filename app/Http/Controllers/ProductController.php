@@ -3,22 +3,26 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Product; // Import du modèle
 
 class ProductController extends Controller
 {
     public function index()
     {
-        $products = [
-            ['id' => 1, 'name' => 'Chaise Industrielle Acier', 'price' => 120],
-            ['id' => 2, 'name' => 'Lampe Atelier Vintage', 'price' => 85],
-            ['id' => 3, 'name' => 'Table Basse Bois Massif', 'price' => 250],
-            ['id' => 4, 'name' => 'Étagère Murale Métal', 'price' => 60],
-            ['id' => 5, 'name' => 'Tabouret de Bar Réglable', 'price' => 95],
-        ];
+        // Avant : $products = [ ...tableau en dur... ];
+        // Maintenant : Récupère TOUS les produits depuis la base de données
+        $products = Product::all(); 
+
         return view('products.index', compact('products'));
     }
+
     public function show($id)
     {
-        return "Détails du produit n° " . $id;
+        // Avant : return "Détails du produit n° " . $id;
+        // Maintenant : Récupère le produit ou affiche une erreur 404 si introuvable
+        $product = Product::findOrFail($id);
+
+        // On retourne une vue (qu'on va créer/vérifier ensuite)
+        return view('products.show', compact('product'));
     }
 }
