@@ -17,7 +17,8 @@ class PageController extends Controller
             'est_ouvert' => true,
         ];
 
-        $url = route('products.show', ['id' => 42]);
+        $url = route('products.show', 42);
+
 
         // 'compact' est une fonction magique PHP qui crée le tableau ['shopData' => $shopData, 'url' => $url] automatiquement
         return view('home', compact('shopData', 'url'));

@@ -3,26 +3,35 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Product; // Import du modèle
+use App\Models\Product;
 
 class ProductController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
     public function index()
     {
-        // Avant : $products = [ ...tableau en dur... ];
-        // Maintenant : Récupère TOUS les produits depuis la base de données
-        $products = Product::all(); 
-
+        $products = Product::all();
         return view('products.index', compact('products'));
     }
 
-    public function show($id)
-    {
-        // Avant : return "Détails du produit n° " . $id;
-        // Maintenant : Récupère le produit ou affiche une erreur 404 si introuvable
-        $product = Product::findOrFail($id);
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create() {}
 
-        // On retourne une vue (qu'on va créer/vérifier ensuite)
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request) {}
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        $product = Product::findOrFail($id);
         return view('products.show', compact('product'));
     }
 }
