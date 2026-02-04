@@ -11,7 +11,7 @@ class ProductControllerOld extends Controller
     {
         // Avant : $products = [ ...tableau en dur... ];
         // Maintenant : Récupère TOUS les produits depuis la base de données
-        $products = Product::all();
+        $products = Product::all(); 
 
         return view('products.index', compact('products'));
     }
