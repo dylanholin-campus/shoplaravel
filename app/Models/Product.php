@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Product extends Model
 {
@@ -34,8 +35,13 @@ class Product extends Model
     /**
      * Relation N:1 avec Category
      */
-    public function category()
+        public function category(): BelongsTo // ← Type de retour ajouté
     {
         return $this->belongsTo(Category::class);
     }
+    // MON CODE D'AVANT (sans type de retour)
+//    public function category()
+//    {
+//        return $this->belongsTo(Category::class);
+//   }
 }

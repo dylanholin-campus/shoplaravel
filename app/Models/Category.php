@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Category extends Model
 {
@@ -26,8 +27,13 @@ class Category extends Model
     /**
      * Relation 1:N avec Product
      */
-    public function products()
+    public function products(): HasMany // ← Type de retour ajouté
     {
         return $this->hasMany(Product::class);
     }
+
+ //   public function products()
+  //  {
+  //      return $this->hasMany(Product::class);
+  //  }
 }
