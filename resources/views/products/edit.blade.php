@@ -8,39 +8,32 @@
 
     <form action="{{ route('products.update', $product) }}" method="POST">
         @csrf
-        @method('PUT') <!-- ← C'EST ÇA ! -->
-
-        <!-- Le reste de ton formulaire... -->
+        @method('PUT') 
+        
     </form>
 
-
-    <!-- Name avec old() et valeur actuelle -->
-    <div class="mb-4">
+    <div class="mb-4">     <!-- Name avec old() et valeur actuelle -->
         <label for="name" class="block text-gray-700 font-bold mb-2">Nom :</label>
         <input type="text" name="name" id="name" value="{{ old('name', $product->name) }}"
             class="w-full border rounded px-3 py-2" required>
     </div>
 
-    <!-- Description -->
-    <div class="mb-4">
+    <div class="mb-4">   <!-- Description -->
         <label for="description" class="block text-gray-700 font-bold mb-2">Description :</label>
         <textarea name="description" id="description" rows="4">{{ old('description', $product->description) }}</textarea>
     </div>
 
-    <!-- Price -->
-    <div class="mb-4">
+    <div class="mb-4">   <!-- Price -->
         <label for="price" class="block text-gray-700 font-bold mb-2">Prix (€) :</label>
         <input type="number" name="price" id="price" step="0.01" value="{{ old('price', $product->price) }}" required>
     </div>
 
-    <!-- Stock -->
-    <div class="mb-4">
+    <div class="mb-4"> <!-- Stock -->
         <label for="stock" class="block text-gray-700 font-bold mb-2">Stock :</label>
         <input type="number" name="stock" id="stock" value="{{ old('stock', $product->stock) }}">
     </div>
-
-    <!-- Catégorie (si tu l'as ajoutée) -->
-    <div class="mb-4">
+   
+    <div class="mb-4"> <!-- Catégorie -->
         <label for="category_id" class="block text-gray-700 font-bold mb-2">Catégorie :</label>
         <select name="category_id" id="category_id" required>
             <option value="">Choisir...</option>
@@ -48,9 +41,8 @@
             <option value="2" {{ old('category_id', $product->category_id) == 2 ? 'selected' : '' }}>Éclairage</option>
         </select>
     </div>
-
-    <!-- Active (Checkbox) -->
-    <div class="mb-6 flex items-center">
+   
+    <div class="mb-6 flex items-center">  <!-- Active (Checkbox) -->
         <input type="hidden" name="active" value="0">
         <input type="checkbox" name="active" id="active" value="1"
             {{ old('active', $product->active) ? 'checked' : '' }}>

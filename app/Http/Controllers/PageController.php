@@ -32,6 +32,6 @@ class PageController extends Controller
 
     public function about()
     {
-        return "Je suis Joel, Designer Industriel basé à Berlin. Ici, on parle chaises et créativité.";
+        return "Je suis un magicien, Designer Industriel basé peut etre à Berlin. Passionné par le design fonctionnel et minimaliste.";
     }
 }

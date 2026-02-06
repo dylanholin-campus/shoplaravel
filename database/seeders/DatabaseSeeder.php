@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@example.com',
         ]);
 
-        // 3. Lancer ton Seeder manuel pour créer les catégories
+        // 3. Lancer mon Seeder manuel pour créer les catégories
         $this->call([
             CategorySeeder::class,
         ]);
