@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CategoryController;
 
 // Route de test simple
 Route::get('/hello', function () {
@@ -12,6 +13,7 @@ Route::get('/hello', function () {
 // Pages statiques (Home, About) gérées par PageController
 Route::get('/', [PageController::class, 'home'])->name('home');
 Route::get('/about', [PageController::class, 'about'])->name('about');
+Route::get('/categories/{category}', [CategoryController::class, 'show'])->name('categories.show');
 
 // Cette seule ligne remplace mes anciennes routes 'products.index' et 'products.show'
 // Elle crée aussi create, store, edit, update, destroy d'un coup.
