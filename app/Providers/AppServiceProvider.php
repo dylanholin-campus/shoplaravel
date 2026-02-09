@@ -3,6 +3,9 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Database\Eloquent\Model; // N'oublie pas l'import !
+
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +22,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Bloque le Lazy Loading (N+1) mais seulement en local, pas en production
+        Model::preventLazyLoading(!app()->isProduction());
     }
 }

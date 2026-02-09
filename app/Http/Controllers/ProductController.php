@@ -10,11 +10,19 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $products = Product::all();
-        return view('products.index', compact('products'));
-    }
+public function index()
+{
+    // ❌ AVANT : Faisait juste "SELECT * FROM products"
+    // $products = Product::all(); 
+
+    // ✅ APRES (Eager Loading) : Fait 2 requêtes optimisées seulement
+    // 1. SELECT * FROM products
+    // 2. SELECT * FROM categories WHERE id IN (1, 2, 5...)
+    $products = Product::with('category')->get();
+
+    return view('products.index', compact('products'));
+}
+
 
     /**
      * Show the form for creating a new resource.
