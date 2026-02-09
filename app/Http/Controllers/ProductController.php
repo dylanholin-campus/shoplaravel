@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Category;
 use App\Models\Product;
 
 class ProductController extends Controller
@@ -10,27 +11,34 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-public function index()
-{
-    // ❌ AVANT : Faisait juste "SELECT * FROM products"
-    // $products = Product::all(); 
+    public function index()
+    {
+        // ❌ AVANT : Faisait juste "SELECT * FROM products"
+        // $products = Product::all(); 
 
-    // ✅ APRES (Eager Loading) : Fait 2 requêtes optimisées seulement
-    // 1. SELECT * FROM products
-    // 2. SELECT * FROM categories WHERE id IN (1, 2, 5...)
-    $products = Product::with('category')->get();
+        // ✅ APRES (Eager Loading) : Fait 2 requêtes optimisées seulement
+        // 1. SELECT * FROM products
+        // 2. SELECT * FROM categories WHERE id IN (1, 2, 5...)
+        $products = Product::with('category')->get();
 
-    return view('products.index', compact('products'));
-}
+        return view('products.index', compact('products'));
+    }
 
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        return view('products.create');
+        $categories = Category::select('id', 'name')->orderBy('name')->get();
+
+        return view('products.create', compact('categories'));
     }
+
+    public function edit(Product $product)
+    {
+        $categories = Category::select('id', 'name')->orderBy('name')->get();
+
+        return view('products.edit', compact('product', 'categories'));
+    }
+
 
     /**
      * Store a newly created resource in storage.
@@ -57,14 +65,6 @@ public function index()
     {
         $product = Product::findOrFail($id);
         return view('products.show', compact('product'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Product $product)
-    {
-        return view('products.edit', compact('product'));
     }
 
     /**

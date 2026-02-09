@@ -45,16 +45,25 @@
         </div>
 
         <!-- Après le champ stock, avant active -->
-        <div class="mb-4">
-            <label for="category_id" class="block text-gray-700 font-bold mb-2">Catégorie :</label>
-            <select name="category_id" id="category_id" required
-                class="w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-300">
-                <option value="">Choisir une catégorie</option>
-                <option value="1">Meuble</option>
-                <option value="2">Éclairage</option>
-                <option value="3">Décoration</option>
-            </select>
-        </div>
+<div class="mb-4">
+    <label for="category_id" class="block text-gray-700 font-bold mb-2">Catégorie :</label>
+
+    <select
+        name="category_id"
+        id="category_id"
+        required
+        class="w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-300"
+    >
+        <option value="">Choisir une catégorie...</option>
+
+        @foreach($categories as $category)
+            <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                {{ $category->name }}
+            </option>
+        @endforeach
+    </select>
+</div>
+
 
 
         <!-- Champ Active (Checkbox) -->
