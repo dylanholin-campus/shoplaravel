@@ -1,49 +1,50 @@
 @extends('layouts.app')
 
-@section('title', 'Nos Produits - Disney Design')
+@section('title', 'Nos Produits - ShopLaravel')
 
 @section('content')
-<h1 class="text-3xl font-bold text-center mb-8">Nos Créations Industrielles</h1>
-
-
-
-<div class="text-right mb-6"> <!-- Bouton pour créer un nouveau produit -->
-    <a href="{{ route('products.create') }}" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
-        + Ajouter un produit
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3">Nos Créations Industrielles</h1>
+    <a href="{{ route('products.create') }}" class="btn btn-success">
+        <i class="bi bi-plus-circle"></i> Ajouter un produit
     </a>
 </div>
 
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
     @foreach($products as $product)
-    <div class="border rounded-lg p-4 shadow hover:shadow-lg transition">
+    <div class="col">
+        <div class="card h-100 shadow-sm transition-hover">
+            <div class="card-img-top bg-black d-flex align-items-center justify-content-center p-4" style="height: 200px;">
+                @if($product->image)
+                <img src="{{ asset('storage/' . $product->image) }}" class="img-fluid" style="max-height: 100%; object-fit: contain;" alt="{{ $product->name }}">
+                @else
+                <span class="text-secondary fs-5">Image Produit</span>
+                @endif
+            </div>
 
-        <div class="h-48 bg-gray-200 mb-4 rounded flex items-center justify-center"> <!-- placeholder-->
-            <span class="text-gray-500">Image Produit</span>
-        </div>
+            <div class="card-body d-flex flex-column">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h5 class="card-title mb-0">{{ $product->name }}</h5>
+                    <span class="badge bg-secondary">{{ $product->category?->name ?? 'Divers' }}</span>
+                </div>
 
-        <h2 class="text-xl font-semibold mb-2">{{ $product->name }}</h2> <!-- TITRE -->
+                <p class="card-text text-muted flex-grow-1 text-truncate" style="max-width: 100%;">
+                    {{ $product->description ?? '' }}
+                </p>
 
-        <div class="mb-2">
-            <span class="text-sm text-gray-500 uppercase tracking-wide">
-                <!-- Affiche le nom ou "Sans catégorie" si null -->
-                {{ $product->category?->name ?? 'Sans catégorie' }}
-            </span>
-        </div>
+                <h4 class="text-primary fw-bold mb-3">{{ number_format($product->price, 2) }} €</h4>
 
-
-        <p class="text-gray-600 mb-4 font-bold">{{ $product->price }} €</p> <!-- PRIX -->
-
-        <div class="flex gap-2"> <!-- BOUTONS D'ACTION - Bouton Voir détails  -->
-            <a href="{{ route('products.show', $product->id) }}"
-                class="flex-1 block text-center bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">
-                Voir
-            </a>
-
-            <!-- Bouton Modifier (NOUVEAU) -->
-            <a href="{{ route('products.edit', $product->id) }}"
-                class="flex-1 block text-center bg-yellow-500 text-white py-2 rounded hover:bg-yellow-600 transition">
-                Modifier
-            </a>
+                <div class="d-grid gap-2">
+                    <div class="btn-group">
+                        <a href="{{ route('products.show', $product->id) }}" class="btn btn-primary">Voir</a>
+                        <a href="{{ route('products.edit', $product->id) }}" class="btn btn-outline-warning">Modifier</a>
+                    </div>
+                    <form action="{{ route('cart.add', $product->id) }}" method="POST">
+                        @csrf
+                        <button type="submit" class="btn btn-dark w-100">Ajouter au panier</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
     @endforeach
