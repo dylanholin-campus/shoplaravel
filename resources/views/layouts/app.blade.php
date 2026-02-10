@@ -63,7 +63,13 @@
                         <a class="nav-link {{ request()->routeIs('products.*') ? 'active' : '' }}" href="{{ route('products.index') }}">Produits</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('cart.index') ? 'active' : '' }}" href="{{ route('cart.index') }}">Panier</a>
+                        <a class="nav-link {{ request()->routeIs('cart.index') ? 'active' : '' }}" href="{{ route('cart.index') }}">
+                            Panier
+                            @php $cartCount = array_sum(array_column(session('cart', []), 'quantity')); @endphp
+                            @if($cartCount > 0)
+                            <span class="badge bg-danger ms-1">{{ $cartCount }}</span>
+                            @endif
+                        </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('about') ? 'active' : '' }}" href="{{ route('about') }}">À propos</a>

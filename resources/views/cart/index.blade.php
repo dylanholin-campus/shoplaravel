@@ -7,7 +7,7 @@
 
 <div class="card shadow-sm">
     <div class="card-body">
-        @if(session('cart') && count(session('cart')) > 0)
+        @if(isset($products) && $products->count() > 0)
         <div class="table-responsive">
             <table class="table table-hover align-middle">
                 <thead>
@@ -20,28 +20,30 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @php $total = 0; @endphp
-                    @foreach(session('cart') as $id => $details)
-                    @php $itemTotal = $details['price'] * $details['quantity']; $total += $itemTotal; @endphp
+                    @foreach($products as $product)
+                    @php
+                    $quantity = $cart[$product->id]['quantity'];
+                    $itemTotal = $product->price * $quantity;
+                    @endphp
                     <tr>
                         <td>
                             <div class="d-flex align-items-center">
-                                @if(isset($details['image']))
-                                <img src="{{ asset('storage/' . $details['image']) }}" width="50" height="50" class="me-3 rounded" style="object-fit: cover;">
+                                @if($product->image)
+                                <img src="{{ asset('storage/' . $product->image) }}" width="50" height="50" class="me-3 rounded" style="object-fit: cover;">
                                 @else
                                 <div class="bg-black rounded d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
                                     <small class="text-muted">Img</small>
                                 </div>
                                 @endif
-                                <span class="fw-bold">{{ $details['name'] }}</span>
+                                <span class="fw-bold">{{ $product->name }}</span>
                             </div>
                         </td>
-                        <td>{{ number_format($details['price'], 2) }} €</td>
+                        <td>{{ number_format($product->price, 2) }} €</td>
                         <td>
-                            <form action="{{ route('cart.update', $id) }}" method="POST" class="d-flex align-items-center">
+                            <form action="{{ route('cart.update', $product->id) }}" method="POST" class="d-flex align-items-center">
                                 @csrf
                                 @method('PATCH')
-                                <input type="number" name="quantity" value="{{ $details['quantity'] }}" class="form-control form-control-sm me-2" style="width: 60px;" min="1">
+                                <input type="number" name="quantity" value="{{ $quantity }}" class="form-control form-control-sm me-2" style="width: 60px;">
                                 <button type="submit" class="btn btn-sm btn-outline-primary" title="Mettre à jour">
                                     &#x21bb;
                                 </button>
@@ -49,7 +51,7 @@
                         </td>
                         <td>{{ number_format($itemTotal, 2) }} €</td>
                         <td>
-                            <form action="{{ route('cart.remove', $id) }}" method="POST">
+                            <form action="{{ route('cart.remove', $product->id) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-sm btn-outline-danger" title="Supprimer">
