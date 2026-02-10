@@ -22,7 +22,8 @@
                 <tbody>
                     @foreach($products as $product)
                     @php
-                    $quantity = $cart[$product->id]['quantity'];
+                    // CORRECTION ICI : On utilise la propriété injectée par le contrôleur
+                    $quantity = $product->quantity;
                     $itemTotal = $product->price * $quantity;
                     @endphp
                     <tr>
@@ -43,7 +44,7 @@
                             <form action="{{ route('cart.update', $product->id) }}" method="POST" class="d-flex align-items-center">
                                 @csrf
                                 @method('PATCH')
-                                <input type="number" name="quantity" value="{{ $quantity }}" class="form-control form-control-sm me-2" style="width: 60px;">
+                                <input type="number" name="quantity" value="{{ $quantity }}" min="0" class="form-control form-control-sm me-2" style="width: 60px;">
                                 <button type="submit" class="btn btn-sm btn-outline-primary" title="Mettre à jour">
                                     &#x21bb;
                                 </button>

@@ -7,96 +7,89 @@ use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
-    // Afficher le panier
+    // Structure du panier en session simplifiée : [ 101 => 2, 105 => 1 ] (ID => Qté)
+
     public function index()
     {
         $cart = session()->get('cart', []);
 
-        // Récupère les IDs des produits
-        $productIds = array_keys($cart);
+        if (empty($cart)) {
+            return view('cart.index', [
+                'products' => collect([]), // On transforme le tableau vide en Collection vide
+                'total' => 0,
+                'cart' => []
+            ]);
+        }
 
-        // Charge les produits depuis la BDD
-        $products = Product::whereIn('id', $productIds)->get();
+        // On charge les produits frais depuis la BDD
+        $products = Product::whereIn('id', array_keys($cart))->get();
 
-        // Calcule le total
+        // On calcule le total et on attache la quantité "virtuellement" aux produits pour la vue
         $total = 0;
         foreach ($products as $product) {
-            $quantity = $cart[$product->id]['quantity'] ?? 0;
-            $total += $product->price * $quantity;
+            $qty = $cart[$product->id];
+            $product->quantity = $qty; // Astuce : on ajoute la qté à l'objet pour la vue
+            $total += $product->price * $qty;
         }
 
-        return view('cart.index', compact('products', 'cart', 'total'));
+        return view('cart.index', compact('products', 'total', 'cart'));
     }
 
-    // Ajouter un produit au panier
     public function add(Request $request, Product $product)
     {
-        // On récupère le panier en session (ou un tableau vide s'il n'existe pas)
         $cart = session()->get('cart', []);
 
-        // Si le produit est déjà dans le panier, on incrémente la quantité
+        // Gestion simplifiée : si existe on incrémente, sinon on initialise à 1
+        // Plus besoin de stocker name/price/image !
         if (isset($cart[$product->id])) {
-            $cart[$product->id]['quantity']++;
+            $cart[$product->id]++;
         } else {
-            // Sinon, on l'ajoute avec une quantité de 1
-            $cart[$product->id] = [
-                "name" => $product->name,
-                "quantity" => 1,
-                "price" => $product->price,
-                "image" => $product->image
-            ];
+            $cart[$product->id] = 1;
         }
 
-        // On sauvegarde le panier en session
         session()->put('cart', $cart);
 
-        return redirect()->back()->with('success', 'Produit ajouté au panier !');
+        return back()->with('success', 'Produit ajouté !');
     }
 
-    // Modifier la quantité d'un produit
     public function update(Request $request, Product $product)
     {
+        // Validation stricte : min 0, max 100 (pour éviter les abus)
         $request->validate([
-            'quantity' => 'required|integer',
+            'quantity' => 'required|integer|min:0|max:100',
         ]);
 
         $cart = session()->get('cart', []);
         $quantity = (int) $request->quantity;
 
-        if (isset($cart[$product->id])) {
-            // Si la quantité est <= 0, on retire le produit du panier
-            if ($quantity <= 0) {
-                unset($cart[$product->id]);
-                session()->put('cart', $cart);
-                return back()->with('success', 'Produit retiré du panier.');
-            }
-
-            // Sinon update de la quantité
-            $cart[$product->id]['quantity'] = $quantity;
-            session()->put('cart', $cart);
-            return back()->with('success', 'Quantité mise à jour.');
+        // Si quantité 0, on supprime, sinon on met à jour
+        if ($quantity === 0) {
+            unset($cart[$product->id]);
+            $message = 'Produit retiré.';
+        } else {
+            $cart[$product->id] = $quantity; // On stocke juste l'entier
+            $message = 'Panier mis à jour.';
         }
 
-        return back()->with('error', 'Produit introuvable dans le panier.');
+        session()->put('cart', $cart);
+
+        return back()->with('success', $message);
     }
 
-    // Retirer un produit du panier
     public function remove(Product $product)
     {
-        $cart = session()->get('cart');
+        $cart = session()->get('cart', []);
 
-        if (isset($cart[$product->id])) {
-            unset($cart[$product->id]);
-            session()->put('cart', $cart);
-        }
+        unset($cart[$product->id]);
 
-        return back()->with('success', 'Produit retiré du panier.');
+        session()->put('cart', $cart);
+
+        return back()->with('success', 'Produit retiré.');
     }
 
-    // Vider tout le panier
     public function clear()
     {
         session()->forget('cart');
-        return back()->with('success', 'Votre panier a été vidé.');
+        return back()->with('success', 'Panier vidé.');
     }
 }
