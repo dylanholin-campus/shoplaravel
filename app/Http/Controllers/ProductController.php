@@ -39,23 +39,42 @@ class ProductController extends Controller
         return view('products.edit', compact('product', 'categories'));
     }
 
+public function store(Request $request)
+{
+    $validated = $request->validate([
+        'name' => ['required', 'string', 'max:255'],
+        'slug' => ['required', 'string', 'max:255', 'alpha_dash', 'unique:products,slug'], 
+        'price' => ['required', 'numeric', 'min:0'],
+        'stock' => ['required', 'integer', 'min:0'],
+        'category_id' => ['required', 'integer', 'exists:categories,id'],
+        'description' => ['nullable', 'string'],
+        'active' => ['sometimes', 'boolean'],
+    ]);
+
+    $validated['active'] = $request->boolean('active');
+
+    Product::create($validated);
+
+    return redirect()->route('products.index')->with('success', 'Produit créé.');
+}
+
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        Product::create([
-            'name' => $request->name,
-            'description' => $request->description,
-            'price' => $request->price,
-            'stock' => $request->stock,
-            'category_id' => $request->category_id,
-            'active' => $request->has('active') ? 1 : 0, // Gère la checkbox
-        ]);
-        return redirect()->route('products.index')
-            ->with('success', 'Produit créé avec succès !');
-    }
+ //   public function store(Request $request)
+ //   {
+   //     Product::create([
+   //         'name' => $request->name,
+  //          'description' => $request->description,
+  //          'price' => $request->price,
+  //          'stock' => $request->stock,
+ //           'category_id' => $request->category_id,
+ //           'active' => $request->has('active') ? 1 : 0, // Gère la checkbox
+ //       ]);
+ //       return redirect()->route('products.index')
+ //           ->with('success', 'Produit créé avec succès !');
+ //   }
 
 
     /**

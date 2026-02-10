@@ -10,18 +10,17 @@ class Product extends Model
 {
     use HasFactory;
 
-    /**
-     * ✅ $fillable : TOUTES tes colonnes de la table products
-     */
+
     protected $fillable = [
         'name',
+        'slug',
         'price',
-        'description',
         'stock',
-        'image',
         'category_id',
-        'active'  // ← On ajoute ce champ boolean
+        'description',
+        'active'
     ];
+
 
     /**
      * ✅ $casts : Conversion automatique des types
@@ -35,13 +34,13 @@ class Product extends Model
     /**
      * Relation N:1 avec Category
      */
-        public function category(): BelongsTo // ← Type de retour ajouté
+    public function category(): BelongsTo // ← Type de retour ajouté
     {
         return $this->belongsTo(Category::class);
     }
     // MON CODE D'AVANT (sans type de retour)
-//    public function category()
-//    {
-//        return $this->belongsTo(Category::class);
-//   }
+    //    public function category()
+    //    {
+    //        return $this->belongsTo(Category::class);
+    //   }
 }
