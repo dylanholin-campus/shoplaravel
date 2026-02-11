@@ -5,9 +5,11 @@
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="h3">Nos Créations Industrielles</h1>
+    @if(auth()->check() && auth()->user()->is_admin)
     <a href="{{ route('products.create') }}" class="btn btn-success">
         <i class="bi bi-plus-circle"></i> Ajouter un produit
     </a>
+    @endif
 </div>
 
 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
@@ -37,7 +39,9 @@
                 <div class="d-grid gap-2">
                     <div class="btn-group">
                         <a href="{{ route('products.show', $product->id) }}" class="btn btn-primary">Voir</a>
+                        @if(auth()->check() && auth()->user()->is_admin)
                         <a href="{{ route('products.edit', $product->id) }}" class="btn btn-outline-warning">Modifier</a>
+                        @endif
                     </div>
                     <form action="{{ route('cart.add', $product->id) }}" method="POST">
                         @csrf

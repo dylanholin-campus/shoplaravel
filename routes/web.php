@@ -5,34 +5,55 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\LogoutController;
 
 // Route de test simple
 Route::get('/hello', function () {
     return 'Hello Laravel!';
 });
 
-// Pages statiques (Home, About) gérées par PageController
+// Routes publiques (tout le monde)
 Route::get('/', [PageController::class, 'home'])->name('home');
 Route::get('/about', [PageController::class, 'about'])->name('about');
 Route::get('/categories/{category}', [CategoryController::class, 'show'])->name('categories.show');
+Route::resource('products', ProductController::class)->only(['index', 'show']);
 
-// Cette seule ligne remplace mes anciennes routes 'products.index' et 'products.show'
-// Elle crée aussi create, store, edit, update, destroy d'un coup.
-Route::resource('products', ProductController::class);
-// --- Routes du Panier ---
-Route::prefix('cart')->name('cart.')->group(function () {
-    // Afficher le panier
-    Route::get('/', [CartController::class, 'index'])->name('index');
+// Auth (invités uniquement)
+Route::middleware('guest')->group(function () {
+    Route::get('/register', [RegisterController::class, 'showForm'])->name('register');
+    Route::post('/register', [RegisterController::class, 'register']);
 
-    // Ajouter un produit (Product $product utilise le Model Binding)
-    Route::post('/add/{product}', [CartController::class, 'add'])->name('add');
+    Route::get('/login', [LoginController::class, 'showForm'])->name('login');
+    Route::post('/login', [LoginController::class, 'login']);
+});
 
-    // Mettre à jour la quantité d'un produit dans le panier
-    Route::patch('/update/{product}', [CartController::class, 'update'])->name('update');
+// Déconnexion (utilisateurs authentifiés)
+Route::post('/logout', [LogoutController::class, 'logout'])->middleware('auth')->name('logout');
 
-    // Supprimer un produit du panier
-    Route::delete('/remove/{product}', [CartController::class, 'remove'])->name('remove');
+// Routes protégées (middleware auth)
+Route::middleware('auth')->group(function () {
+    // --- Routes du Panier ---
+    Route::prefix('cart')->name('cart.')->group(function () {
+        // Afficher le panier
+        Route::get('/', [CartController::class, 'index'])->name('index');
 
-    // Vider entièrement le panier
-    Route::delete('/clear', [CartController::class, 'clear'])->name('clear');
+        // Ajouter un produit (Product $product utilise le Model Binding)
+        Route::post('/add/{product}', [CartController::class, 'add'])->name('add');
+
+        // Mettre à jour la quantité d'un produit dans le panier
+        Route::patch('/update/{product}', [CartController::class, 'update'])->name('update');
+
+        // Supprimer un produit du panier
+        Route::delete('/remove/{product}', [CartController::class, 'remove'])->name('remove');
+
+        // Vider entièrement le panier
+        Route::delete('/clear', [CartController::class, 'clear'])->name('clear');
+    });
+});
+
+// Routes produits réservées à l'admin
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::resource('products', ProductController::class)->except(['index', 'show']);
 });

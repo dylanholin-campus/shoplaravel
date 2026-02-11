@@ -22,9 +22,8 @@ class Product extends Model
     ];
 
 
-    /**
-     * ✅ $casts : Conversion automatique des types
-     */
+    // Conversion automatique des types
+
     protected $casts = [
         'price' => 'decimal:2',   // "120.00" → 120.00 (nombre)
         'active' => 'boolean',    // 1/0 → true/false
@@ -34,7 +33,7 @@ class Product extends Model
     /**
      * Relation N:1 avec Category
      */
-    public function category(): BelongsTo // ← Type de retour ajouté
+    public function category(): BelongsTo // ← Type de retour ajouté - un produit appartient à une seule catégorie
     {
         return $this->belongsTo(Category::class);
     }
