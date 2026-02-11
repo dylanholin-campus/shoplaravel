@@ -7,28 +7,24 @@ use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
-    // Structure du panier en session simplifiée : [ 101 => 2, 105 => 1 ] (ID => Qté)
-
     public function index()
     {
         $cart = session()->get('cart', []);
 
         if (empty($cart)) {
             return view('cart.index', [
-                'products' => collect([]), // On transforme le tableau vide en Collection vide
+                'products' => collect([]), // Transforme le tableau vide en Collection vide, sa evite les erreurs exemple avec $products->count()
                 'total' => 0,
                 'cart' => []
             ]);
         }
 
-        // On charge les produits frais depuis la BDD
         $products = Product::whereIn('id', array_keys($cart))->get();
 
-        // On calcule le total et on attache la quantité "virtuellement" aux produits pour la vue
         $total = 0;
         foreach ($products as $product) {
             $qty = $cart[$product->id];
-            $product->quantity = $qty; // Astuce : on ajoute la qté à l'objet pour la vue
+            $product->quantity = $qty;
             $total += $product->price * $qty;
         }
 
@@ -39,22 +35,19 @@ class CartController extends Controller
     {
         $cart = session()->get('cart', []);
 
-        // Gestion simplifiée : si existe on incrémente, sinon on initialise à 1
-        // Plus besoin de stocker name/price/image !
         if (isset($cart[$product->id])) {
             $cart[$product->id]++;
         } else {
-            $cart[$product->id] = 1;
+            $cart[$product->id] = 1; // j'ajoute l’ID dans le panier avec une quantité initiale de 1.
         }
 
-        session()->put('cart', $cart);
+        session()->put('cart', $cart); // save
 
         return back()->with('success', 'Produit ajouté !');
     }
 
     public function update(Request $request, Product $product)
     {
-        // Validation stricte : min 0, max 100 (pour éviter les abus)
         $request->validate([
             'quantity' => 'required|integer|min:0|max:100',
         ]);
@@ -62,7 +55,6 @@ class CartController extends Controller
         $cart = session()->get('cart', []);
         $quantity = (int) $request->quantity;
 
-        // Si quantité 0, on supprime, sinon on met à jour
         if ($quantity === 0) {
             unset($cart[$product->id]);
             $message = 'Produit retiré.';

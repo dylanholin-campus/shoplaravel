@@ -10,29 +10,20 @@ class Category extends Model
 {
     use HasFactory;
 
-    /**
-     * ✅ $fillable : Colonnes autorisées mass assignment
-     */
     protected $fillable = [
         'name',
         'slug',
         'description'
     ];
 
-    /**
-     * ✅ $casts : Pas de boolean ici (pas de champ 'active')
-     */
     protected $casts = [];
 
-    /**
-     * Relation 1:N avec Product
-     */
-    public function products(): HasMany // ← Type de retour ajouté
+    public function products(): HasMany // ← Type de retour ajouté - une catégorie a plusieurs produits
     {
         return $this->hasMany(Product::class);
     }
 
-    public function getRouteKeyName(): string
+    public function getRouteKeyName(): string // a la place de mon ID j'utilise le slug pour le route model binding
     {
         return 'slug';
     }

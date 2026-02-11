@@ -9,7 +9,7 @@ use Illuminate\Support\Str;
 
 class CategorySeeder extends Seeder
 {
-    use WithoutModelEvents;
+    use WithoutModelEvents; // pour éviter les événements Eloquent lors de l'insertion (gain de performance)
 
     /**
      * Run the database seeds.
@@ -18,7 +18,6 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        // On définit nos catégories dans un tableau
         $categories = [
             ['name' => 'Meubles', 'description' => 'Tout pour aménager votre intérieur'],
             ['name' => 'Décoration', 'description' => 'Les petits détails qui changent tout'],
@@ -41,7 +40,7 @@ class CategorySeeder extends Seeder
             ];
         }
 
-        // Insertion en une seule requête SQL (très performant)
+        // insertion avec DB, c'est un Query Builder (sans passer par Eloquent).
         DB::table('categories')->insert($data);
     }
 }

@@ -13,13 +13,10 @@ class ProductController extends Controller
      */
     public function index()
     {
-        // ❌ AVANT : Faisait juste "SELECT * FROM products"
+        // avant j'ai fait l'equivalent de "SELECT * FROM products"
         // $products = Product::all(); 
 
-        // ✅ APRES (Eager Loading) : Fait 2 requêtes optimisées seulement
-        // 1. SELECT * FROM products
-        // 2. SELECT * FROM categories WHERE id IN (1, 2, 5...)
-        $products = Product::with('category')->get();
+        $products = Product::with('category')->get(); // APRES (Eager Loading) 
 
         return view('products.index', compact('products'));
     }

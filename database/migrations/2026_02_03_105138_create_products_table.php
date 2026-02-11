@@ -14,14 +14,9 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            // Prix : 8 chiffres au total, dont 2 après la virgule (ex: 123456.99)
             $table->decimal('price', 8, 2);
             $table->text('description')->nullable();
             $table->integer('stock')->default(0);
-
-            // Clé étrangère vers la table categories
-            // constrained() vérifie automatiquement que l'id existe dans la table 'categories'
-            // onDelete('cascade') supprime les produits si la catégorie est supprimée
             $table->foreignId('category_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
