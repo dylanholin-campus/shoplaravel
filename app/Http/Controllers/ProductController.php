@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Product;
+use Illuminate\Validation\Rule;
 
 class ProductController extends Controller
 {
@@ -36,24 +37,24 @@ class ProductController extends Controller
         return view('products.edit', compact('product', 'categories'));
     }
 
-public function store(Request $request)
-{
-    $validated = $request->validate([
-        'name' => ['required', 'string', 'max:255'],
-        'slug' => ['required', 'string', 'max:255', 'alpha_dash', 'unique:products,slug'], 
-        'price' => ['required', 'numeric', 'min:0'],
-        'stock' => ['required', 'integer', 'min:0'],
-        'category_id' => ['required', 'integer', 'exists:categories,id'],
-        'description' => ['nullable', 'string'],
-        'active' => ['sometimes', 'boolean'],
-    ]);
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'slug' => ['required', 'string', 'max:255', 'alpha_dash', 'unique:products,slug'],
+            'price' => ['required', 'numeric', 'min:0'],
+            'stock' => ['required', 'integer', 'min:0'],
+            'category_id' => ['required', 'integer', 'exists:categories,id'],
+            'description' => ['nullable', 'string'],
+            'active' => ['sometimes', 'boolean'],
+        ]);
 
-    $validated['active'] = $request->boolean('active');
+        $validated['active'] = $request->boolean('active');
 
-    Product::create($validated);
+        Product::create($validated);
 
-    return redirect()->route('products.index')->with('success', 'Produit créé.');
-}
+        return redirect()->route('products.index')->with('success', 'Produit créé.');
+    }
 
 
     /**
@@ -77,9 +78,8 @@ public function store(Request $request)
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Product $product)
     {
-        $product = Product::findOrFail($id);
         return view('products.show', compact('product'));
     }
 
@@ -88,14 +88,19 @@ public function store(Request $request)
      */
     public function update(Request $request, Product $product)
     {
-        $product->update([
-            'name' => $request->name,
-            'description' => $request->description,
-            'price' => $request->price,
-            'stock' => $request->stock,
-            'category_id' => $request->category_id,
-            'active' => $request->has('active') ? 1 : 0,
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'slug' => ['required', 'string', 'max:255', 'alpha_dash', Rule::unique('products', 'slug')->ignore($product->id)],
+            'price' => ['required', 'numeric', 'min:0'],
+            'stock' => ['required', 'integer', 'min:0'],
+            'category_id' => ['required', 'integer', 'exists:categories,id'],
+            'description' => ['nullable', 'string'],
+            'active' => ['sometimes', 'boolean'],
         ]);
+
+        $validated['active'] = $request->boolean('active');
+
+        $product->update($validated);
 
         return redirect()->route('products.index')
             ->with('success', 'Produit modifié avec succès !');
