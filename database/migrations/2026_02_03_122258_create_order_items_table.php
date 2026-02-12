@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('order_items', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('order_id')->constrained()->onDelete('cascade');
+            $table->foreignId('product_id')->constrained();
+            $table->integer('quantity');
+            $table->decimal('unit_price', 10, 2);
             $table->timestamps();
         });
     }
@@ -25,12 +29,3 @@ return new class extends Migration
         Schema::dropIfExists('order_items');
     }
 };
-
-Schema::create('order_items', function (Blueprint $table) {
-    $table->id();
-    $table->foreignId('order_id')->constrained()->onDelete('cascade');
-    $table->foreignId('product_id')->constrained(); // Quel produit ?
-    $table->integer('quantity');
-    $table->decimal('unit_price', 10, 2); // Prix au moment de l'achat
-    $table->timestamps();
-});
