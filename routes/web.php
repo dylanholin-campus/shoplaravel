@@ -8,6 +8,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
@@ -54,6 +55,9 @@ Route::middleware('auth')->group(function () {
         // Vider entièrement le panier
         Route::delete('/clear', [CartController::class, 'clear'])->name('clear');
     });
+
+    // --- Routes des Commandes ---
+    Route::resource('orders', OrderController::class)->only(['index', 'store', 'show']);
 });
 
 // Routes produits réservées à l'admin

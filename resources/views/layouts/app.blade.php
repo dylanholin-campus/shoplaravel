@@ -89,6 +89,11 @@
                         </span>
                     </li>
 
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('orders.*') ? 'active' : '' }}"
+                            href="{{ route('orders.index') }}">Mes Commandes</a>
+                    </li>
+
                     @if (Route::has('logout'))
                     <li class="nav-item">
                         <form method="POST" action="{{ route('logout') }}" class="d-inline">

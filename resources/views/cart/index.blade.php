@@ -80,7 +80,10 @@
             </form>
             <div>
                 <a href="{{ route('products.index') }}" class="btn btn-secondary me-2">Continuer mes achats</a>
-                <button class="btn btn-primary btn-lg">Passer la commande</button>
+                <form action="{{ route('orders.store') }}" method="POST" class="d-inline">
+                    @csrf
+                    <button type="submit" class="btn btn-primary btn-lg">Passer la commande</button>
+                </form>
             </div>
         </div>
 
