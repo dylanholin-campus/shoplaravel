@@ -8,6 +8,9 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\ProductController as AdminProductController;
+use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 
 // Route de test simple
 Route::get('/hello', function () {
@@ -56,4 +59,11 @@ Route::middleware('auth')->group(function () {
 // Routes produits réservées à l'admin
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::resource('products', ProductController::class)->except(['index', 'show']);
+});
+
+// Routes d'administration
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::resource('products', AdminProductController::class);
+    Route::resource('categories', AdminCategoryController::class);
 });
