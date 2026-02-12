@@ -4,10 +4,10 @@
 
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="h3">Nos Créations Industrielles</h1>
+    <h1 class="h3">Les Échoppes de Tamriel</h1>
     @if(auth()->check() && auth()->user()->is_admin)
     <a href="{{ route('products.create') }}" class="btn btn-success">
-        <i class="bi bi-plus-circle"></i> Ajouter un produit
+        <i class="bi bi-plus-circle"></i> Forger un artefact
     </a>
     @endif
 </div>
@@ -20,7 +20,7 @@
                 @if($product->image)
                 <img src="{{ asset('storage/' . $product->image) }}" class="img-fluid" style="max-height: 100%; object-fit: contain;" alt="{{ $product->name }}">
                 @else
-                <span class="text-secondary fs-5">Image Produit</span>
+                <span class="text-secondary fs-5">Relique scellée</span>
                 @endif
             </div>
 
@@ -34,18 +34,18 @@
                     {{ $product->description ?? '' }}
                 </p>
 
-                <h4 class="text-primary fw-bold mb-3">{{ number_format($product->price, 2) }} €</h4>
+                <h4 class="text-warning fw-bold mb-3">{{ number_format($product->price, 2) }} €</h4>
 
                 <div class="d-grid gap-2">
                     <div class="btn-group">
-                        <a href="{{ route('products.show', $product->id) }}" class="btn btn-primary">Voir</a>
+                        <a href="{{ route('products.show', $product->id) }}" class="btn btn-primary">Examiner</a>
                         @if(auth()->check() && auth()->user()->is_admin)
-                        <a href="{{ route('products.edit', $product->id) }}" class="btn btn-outline-warning">Modifier</a>
+                        <a href="{{ route('products.edit', $product->id) }}" class="btn btn-outline-warning">Retoucher</a>
                         @endif
                     </div>
                     <form action="{{ route('cart.add', $product->id) }}" method="POST">
                         @csrf
-                        <button type="submit" class="btn btn-dark w-100">Ajouter au panier</button>
+                        <button type="submit" class="btn btn-dark w-100">Placer dans la besace</button>
                     </form>
                 </div>
             </div>

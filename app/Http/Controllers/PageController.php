@@ -7,7 +7,7 @@ class PageController extends Controller
     public function home()
     {
         $shopData = [
-            'nom_boutique' => 'Disney Design',
+            'nom_boutique' => "l' Albion ",
             'nombre_produits' => 273,
             'est_ouvert' => true,
         ];

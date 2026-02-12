@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
-@section('title', 'Mon Panier')
+@section('title', 'Ma Besace')
 
 @section('content')
-<h1 class="mb-4">Mon Panier</h1>
+<h1 class="mb-4">Ma Besace d'aventurier</h1>
 
 <div class="card shadow-sm">
     <div class="card-body">
@@ -12,11 +12,11 @@
             <table class="table table-hover align-middle">
                 <thead>
                     <tr>
-                        <th>Produit</th>
-                        <th>Prix</th>
+                        <th>Artefact</th>
+                        <th>Valeur</th>
                         <th>Quantité</th>
                         <th>Total</th>
-                        <th>Actions</th>
+                        <th>Gestes</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -45,7 +45,7 @@
                                 @csrf
                                 @method('PATCH')
                                 <input type="number" name="quantity" value="{{ $quantity }}" min="0" class="form-control form-control-sm me-2" style="width: 60px;">
-                                <button type="submit" class="btn btn-sm btn-outline-primary" title="Mettre à jour">
+                                <button type="submit" class="btn btn-sm btn-outline-primary" title="Ajuster la besace">
                                     &#x21bb;
                                 </button>
                             </form>
@@ -55,7 +55,7 @@
                             <form action="{{ route('cart.remove', $product->id) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-outline-danger" title="Supprimer">
+                                <button type="submit" class="btn btn-sm btn-outline-danger" title="Retirer de la besace">
                                     &times;
                                 </button>
                             </form>
@@ -65,7 +65,7 @@
                 </tbody>
                 <tfoot class="table-group-divider">
                     <tr>
-                        <td colspan="3" class="text-end border-0 pt-3"><strong>Sous-total :</strong></td>
+                        <td colspan="3" class="text-end border-0 pt-3"><strong>Valeur totale du butin :</strong></td>
                         <td colspan="2" class="border-0 pt-3"><strong class="fs-5">{{ number_format($total, 2) }} €</strong></td>
                     </tr>
                 </tfoot>
@@ -73,16 +73,16 @@
         </div>
 
         <div class="d-flex justify-content-between align-items-center mt-4">
-            <form action="{{ route('cart.clear') }}" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir vider le panier ?');">
+            <form action="{{ route('cart.clear') }}" method="POST" onsubmit="return confirm('Voulez-vous vraiment vider la besace ?');">
                 @csrf
                 @method('DELETE')
-                <button class="btn btn-outline-danger">Vider le panier</button>
+                <button class="btn btn-outline-danger">Vider la besace</button>
             </form>
             <div>
-                <a href="{{ route('products.index') }}" class="btn btn-secondary me-2">Continuer mes achats</a>
+                <a href="{{ route('products.index') }}" class="btn btn-secondary me-2">Retour aux échoppes</a>
                 <form action="{{ route('orders.store') }}" method="POST" class="d-inline">
                     @csrf
-                    <button type="submit" class="btn btn-primary btn-lg">Passer la commande</button>
+                    <button type="submit" class="btn btn-primary btn-lg">finaliser la commande</button>
                 </form>
             </div>
         </div>
@@ -95,9 +95,9 @@
                     <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zm3.915 10L3.102 4h10.796l-1.313 7h-8.17zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
                 </svg>
             </div>
-            <h4 class="text-muted">Votre panier est vide</h4>
-            <p class="mb-4">Découvrez nos produits et commencez vos achats !</p>
-            <a href="{{ route('products.index') }}" class="btn btn-primary">Voir les produits</a>
+            <h4 class="text-muted">Votre besace est vide</h4>
+            <p class="mb-4">Prenez la route et équipez-vous pour votre prochaine aventure.</p>
+            <a href="{{ route('products.index') }}" class="btn btn-primary">Explorer les échoppes</a>
         </div>
         @endif
     </div>

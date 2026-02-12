@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Category;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class CategorySeeder extends Seeder
@@ -19,28 +19,21 @@ class CategorySeeder extends Seeder
     public function run(): void
     {
         $categories = [
-            ['name' => 'Meubles', 'description' => 'Tout pour aménager votre intérieur'],
-            ['name' => 'Décoration', 'description' => 'Les petits détails qui changent tout'],
-            ['name' => 'Luminaire', 'description' => 'Éclairez votre espace avec style'],
-            ['name' => 'Cuisine', 'description' => 'Ustensiles et accessoires pour les chefs'],
-            ['name' => 'Jardin', 'description' => 'Pour profiter des beaux jours'],
+            ['name' => 'Armes', 'description' => 'Lames, arcs et armes légendaires de Tamriel'],
+            ['name' => 'Armures', 'description' => 'Équipements défensifs forgés par les meilleures guildes'],
+            ['name' => 'Alchimie', 'description' => 'Potions, ingrédients rares et mélanges mystiques'],
+            ['name' => 'Artefacts', 'description' => 'Objets enchantés, reliques daedriques et trésors anciens'],
+            ['name' => 'Magie', 'description' => 'Tomes, parchemins et catalyseurs pour mages aventureux'],
         ];
 
-        // On prépare les données pour l'insertion
-        $data = [];
-        $now = now(); // Récupère la date et l'heure actuelles une seule fois
-
         foreach ($categories as $category) {
-            $data[] = [
-                'name' => $category['name'],
-                'slug' => Str::slug($category['name']),
-                'description' => $category['description'],
-                'created_at' => $now,
-                'updated_at' => $now,
-            ];
+            Category::updateOrCreate(
+                ['slug' => Str::slug($category['name'])],
+                [
+                    'name' => $category['name'],
+                    'description' => $category['description'],
+                ]
+            );
         }
-
-        // insertion avec DB, c'est un Query Builder (sans passer par Eloquent).
-        DB::table('categories')->insert($data);
     }
 }

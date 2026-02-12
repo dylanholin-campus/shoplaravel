@@ -24,7 +24,7 @@
         </nav>
 
         <h1 class="display-4 fw-bold mb-3">{{ $product->name }}</h1>
-        <p class="h3 text-primary mb-4">{{ number_format($product->price, 2) }} €</p>
+        <p class="h3 text-warning mb-4">{{ number_format($product->price, 2) }} €</p>
 
         <p class="lead mb-5">
             {{ $product->description ?? 'Aucune description pour ce produit.' }}

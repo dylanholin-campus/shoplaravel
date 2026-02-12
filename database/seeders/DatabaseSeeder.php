@@ -13,28 +13,30 @@ class DatabaseSeeder extends Seeder
 
     public function run(): void
     {
-        \App\Models\User::factory(10)->create();
-
-        // l'utilisateur admin de test
+        // Utilisateur admin de test
         User::updateOrCreate(
             ['email' => 'test@example.com'],
             [
-                'name' => 'Test User',
+                'name' => 'Admin Tamriel',
                 'password' => Hash::make('fromage123'),
                 'is_admin' => true,
             ]
         );
 
-        // Lancer mon Seeder manuel pour créer les catégories
+        // Utilisateur joueur de test (non admin)
+        User::updateOrCreate(
+            ['email' => 'joueur@example.com'],
+            [
+                'name' => 'Aventurier Nordique',
+                'password' => Hash::make('fromage123'),
+                'is_admin' => false,
+            ]
+        );
+
+        // Seeders catalogue (données fixes, sans factory)
         $this->call([
             CategorySeeder::class,
+            ProductSeeder::class,
         ]);
-
-        // 4. Créer des produits pour chaque catégorie existante
-        \App\Models\Category::all()->each(function ($category) {
-            \App\Models\Product::factory(10)->create([
-                'category_id' => $category->id
-            ]);
-        });
     }
 }
