@@ -103,6 +103,36 @@
             background-color: rgba(197, 164, 106, .08);
         }
 
+        .table thead th {
+            font-family: 'Cinzel', serif;
+            font-weight: 600;
+            color: #d7c8a3;
+            white-space: nowrap;
+        }
+
+        .transition-hover {
+            transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+        }
+
+        .transition-hover:hover {
+            transform: translateY(-4px);
+            border-color: rgba(197, 164, 106, .45);
+            box-shadow: 0 14px 28px rgba(0, 0, 0, .34);
+        }
+
+        .product-media {
+            background: radial-gradient(circle at 20% 20%, rgba(197, 164, 106, .08), transparent 40%), #10110f;
+            border-bottom: 1px solid rgba(197, 164, 106, .18);
+        }
+
+        .line-clamp-2 {
+            display: -webkit-box;
+            line-clamp: 2;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
         .btn-primary {
             --bs-btn-bg: #7e5f35;
             --bs-btn-border-color: #7e5f35;
@@ -169,6 +199,18 @@
             --bs-btn-hover-bg: #98845f;
             --bs-btn-hover-border-color: #98845f;
             --bs-btn-hover-color: #161616;
+        }
+
+        .btn {
+            transition: all .18s ease;
+        }
+
+        .btn:focus-visible,
+        .form-control:focus-visible,
+        .form-select:focus-visible,
+        a:focus-visible {
+            outline: 2px solid rgba(213, 182, 121, .75);
+            outline-offset: 2px;
         }
 
         .badge.bg-danger {

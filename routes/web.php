@@ -22,7 +22,10 @@ Route::get('/hello', function () {
 Route::get('/', [PageController::class, 'home'])->name('home');
 Route::get('/about', [PageController::class, 'about'])->name('about');
 Route::get('/categories/{category}', [CategoryController::class, 'show'])->name('categories.show');
-Route::resource('products', ProductController::class)->only(['index', 'show']);
+Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+Route::get('/products/{product}', [ProductController::class, 'show'])
+    ->whereNumber('product')
+    ->name('products.show');
 
 // Auth (invités uniquement)
 Route::middleware('guest')->group(function () {

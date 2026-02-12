@@ -41,7 +41,7 @@
                             <span class="badge bg-secondary">{{ ucfirst($order->status) }}</span>
                             @endif
                         </td>
-                        <td>{{ $order->orderItems->count() }} relique(s)</td>
+                        <td>{{ $order->order_items_count }} relique(s)</td>
                         <td class="text-end">
                             <a href="{{ route('orders.show', $order) }}" class="btn btn-sm btn-outline-light">Consulter</a>
                         </td>

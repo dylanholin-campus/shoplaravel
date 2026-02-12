@@ -20,7 +20,10 @@ class OrderController extends Controller
             return redirect()->route('login')->with('error', 'Veuillez vous connecter.');
         }
 
-        $orders = $user->orders()->latest()->get();
+        $orders = $user->orders()
+            ->withCount('orderItems')
+            ->latest()
+            ->get();
 
         return view('orders.index', compact('orders'));
     }
@@ -41,7 +44,7 @@ class OrderController extends Controller
             return redirect()->route('orders.index')->with('error', 'Accès refusé.');
         }
 
-        $order->load('orderItems.product');
+        $order->load(['orderItems.product', 'user']);
 
         return view('orders.show', compact('order'));
     }
